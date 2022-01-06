@@ -13,10 +13,7 @@ import java.io.IOException;
 
 public class MenuSelect {
 
-
     private JFrame frame;
-
-    private boolean logging = false;
 
     public MenuSelect() {
         initialize();
@@ -27,55 +24,47 @@ public class MenuSelect {
         frame = new JFrame();
         frame.setTitle("Minesweeper - select");
         frame.setBounds(650, 250, 600, 608);
-        frame.setMinimumSize(new Dimension(600, 608));
-        frame.setMaximizedBounds(new Rectangle(650, 250, 600, 608));
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        /*JLabel img = new JLabel(Centrum.getImage("/img/splotchy.tech.png"));
-        int sizeX = 600, sizeY = 208;
-        img.setBounds(300 - (sizeX/2), 0, sizeX, sizeY);
-        frame.getContentPane().add(img);
+        JLabel mins = new JLabel("Počet min");
+        mins.setFont(new Font("Dialog", Font.BOLD, 18));
+        mins.setBounds(140, 308, 100, 20);
+        frame.getContentPane().add(mins);
 
-		JLabel creator = new JLabel("Created by The_MaxCZ");
-		creator.setFont(new Font("Dialog", Font.BOLD, 12));
-		creator.setHorizontalAlignment(SwingConstants.RIGHT);
-		creator.setBounds(400, 578, 190, 20);
-		frame.getContentPane().add(creator);*/
-
-        JPanel panel = new JPanel();
-        panel.setBounds(100, 308, 400, 200);
-        frame.getContentPane().add(panel);
-        panel.setLayout(null);
-
-        JLabel nickname = new JLabel("Nickname");
-        nickname.setFont(new Font("Dialog", Font.BOLD, 18));
-        nickname.setBounds(40, 20, 100, 20);
-        panel.add(nickname);
-
-        JTextField nicknameText = new JTextField();
-        nicknameText.addKeyListener(new KeyAdapter() {
+        JTextField minsText = new JTextField();
+        mins.setLabelFor(minsText);
+        minsText.setBounds(280, 308, 100, 20);
+        minsText.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent event) {
-                if (nicknameText.getText().length() >= 15)
+                try {
+                    Integer.parseInt(event.getKeyChar() + "");
+                } catch (NumberFormatException e) {
                     event.consume();
+                }
             }
         });
-        nickname.setLabelFor(nicknameText);
-        nicknameText.setFont(new Font("Dialog", Font.PLAIN, 18));
-        nicknameText.setBounds(180, 20, 170, 20);
-        panel.add(nicknameText);
-        nicknameText.setColumns(10);
+        frame.getContentPane().add(minsText);
 
-        JLabel password = new JLabel("Password");
-        password.setFont(new Font("Dialog", Font.BOLD, 18));
-        password.setBounds(40, 60, 100, 20);
-        panel.add(password);
+        JButton button = new JButton("Začít hru");
+        button.setFont(new Font("Dialog", Font.BOLD, 18));
+        button.setBounds(215, 428, 120, 35);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (minsText.getText().length() == 0) {
+                    return;
+                }
+                try {
+                    new MenuPlay(Integer.parseInt(minsText.getText()));
+                    frame.dispose();
+                } catch (NumberFormatException ex) {
 
-        JPasswordField passwordText = new JPasswordField();
-        password.setLabelFor(passwordText);
-        passwordText.setFont(new Font("Dialog", Font.PLAIN, 18));
-        passwordText.setBounds(180, 60, 170, 20);
-        panel.add(passwordText);
+                }
+            }
+        });
+        frame.getContentPane().add(button);
     }
 }
