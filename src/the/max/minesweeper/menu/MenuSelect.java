@@ -33,7 +33,7 @@ public class MenuSelect {
         mins.setBounds(140, 308, 100, 20);
         frame.getContentPane().add(mins);
 
-        JTextField minsText = new JTextField();
+        JTextField minsText = new JTextField("2");
         mins.setLabelFor(minsText);
         minsText.setBounds(280, 308, 100, 20);
         minsText.addKeyListener(new KeyAdapter() {
@@ -48,6 +48,26 @@ public class MenuSelect {
         });
         frame.getContentPane().add(minsText);
 
+        JLabel fields = new JLabel("Počet polí");
+        fields.setFont(new Font("Dialog", Font.BOLD, 18));
+        fields.setBounds(140, 338, 100, 20);
+        frame.getContentPane().add(fields);
+
+        JTextField fieldsText = new JTextField("10");
+        fields.setLabelFor(fieldsText);
+        fieldsText.setBounds(280, 338, 100, 20);
+        fieldsText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent event) {
+                try {
+                    Integer.parseInt(event.getKeyChar() + "");
+                } catch (NumberFormatException e) {
+                    event.consume();
+                }
+            }
+        });
+        frame.getContentPane().add(fieldsText);
+
         JButton button = new JButton("Začít hru");
         button.setFont(new Font("Dialog", Font.BOLD, 18));
         button.setBounds(215, 428, 120, 35);
@@ -58,7 +78,7 @@ public class MenuSelect {
                     return;
                 }
                 try {
-                    new MenuPlay(Integer.parseInt(minsText.getText()));
+                    new MenuPlay(Integer.parseInt(minsText.getText()), Integer.parseInt(fieldsText.getText()));
                     frame.dispose();
                 } catch (NumberFormatException ex) {
 
