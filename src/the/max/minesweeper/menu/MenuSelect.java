@@ -78,7 +78,7 @@ public class MenuSelect {
                     return;
                 }
                 try {
-                    new MenuPlay(Integer.parseInt(minsText.getText()), Integer.parseInt(fieldsText.getText()));
+                    new MenuPlay(Integer.parseInt(minsText.getText()), Integer.parseInt(fieldsText.getText()), frame.getBounds());
                     frame.dispose();
                 } catch (NumberFormatException ex) {
 
