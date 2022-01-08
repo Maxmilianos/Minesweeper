@@ -1,5 +1,9 @@
 package the.max.minesweeper.menu;
 
+import the.max.minesweeper.utils.UtilImage;
+import the.max.minesweeper.utils.UtilRandom;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -34,19 +38,29 @@ public class MenuPlay {
 
         for (int x = 0; x < fie; x++) {
             for (int y = 0; y < fie; y++) {
-                fields.add(new Field(x, y));
+                Field field = new Field(x, y);
+                fields.add(field);
                 JLabel label = new JLabel();
-                label.setText(x + "" + y);
+                field.label = label;
+                label.setText(x + " " + y);
                 // nějak vypočítat ty píčoviny, aby to vycházelo od okraje po okraj (nějaká rovnice)
-                int width = size/fie * x,
-                height = size/fie * y,
-                labelSize = size/fie;
-                label.setIcon(new ImageIcon("hihi.jpg"));
-                label.setBounds(width, height, labelSize, labelSize);
+                int width = size/fie,
+                        height = size/fie,
+                        labelX = size/fie * x,
+                        labelY = size/fie * y,
+                        labelSize = size/fie;
+                System.out.println("width: " + width + ", height: " + height + ", labelX: " + labelX + ", labelY: " + labelY + ", labelSize: " + labelSize);
+                label.setIcon(UtilImage.getScaledImage(new ImageIcon("mine.png"), width, height));
+                label.setBounds(labelX, labelY, labelSize, labelSize);
                 label.addMouseListener(new MouseListener() {
+                    /*
+                    1 - leve
+                    2 - prostredni
+                    3 - prave
+                     */
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        System.out.println("Hihi j");
+                        System.out.println("Hihi j " + e.getButton() + " " + label.getText());
 
                     }
 
@@ -73,11 +87,19 @@ public class MenuPlay {
                 frame.getContentPane().add(label);
             }
         }
+
+        ArrayList<Field> cloneFields = (ArrayList<Field>) fields.clone(), mines = new ArrayList<Field>();
+        for (int i = 0; i < mins; i++) {
+            Field field = cloneFields.get(UtilRandom.getRandomNumber(0, cloneFields.size()));
+            field.label.setText("Mina hihi");
+        }
     }
 
     public class Field {
 
         public int x, y;
+
+        public JLabel label;
 
         public Field(int x, int y) {
             this.x = x;
@@ -93,6 +115,10 @@ public class MenuPlay {
             graphics2D.draw(new Line2D.Float(0, 10, 20, 10));
             System.out.println("Oki no");
         }*/
+    }
+
+    public class Panel {
+
     }
 
 }
