@@ -32,8 +32,8 @@ public class MenuPlay {
         frame.setTitle("Minesweeper - game");
         frame.setBounds(bounds);
         // (size + 6) bcs to tak vychazalo, (size + 30) bcs toolbar si zere jeste neco mrdka jedka
-        frame.setSize(new Dimension(size + 6, size + 30 + 50));
-        //frame.setResizable(false);
+        frame.setSize(new Dimension(size + 6, size + 29));
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
@@ -42,6 +42,7 @@ public class MenuPlay {
             for (int y = 0; y < fie; y++) {
                 if (true) {
                     Field field = new Field(x, y);
+                    field.type = Type.CLASSIC;
                     fields.add(field);
                     JLabel label = new JLabel();
                     field.label = label;
@@ -54,7 +55,7 @@ public class MenuPlay {
                             labelY = size / fie * y,
                             labelSize = size / fie;
                     System.out.println("x: " + x + ", y: " + y + ", width: " + width + ", height: " + height + ", labelX: " + labelX + ", labelY: " + labelY + ", labelSize: " + labelSize);
-                    label.setIcon(UtilImage.getScaledImage(new ImageIcon("mine.png"), width, height));
+                    label.setIcon(UtilImage.getScaledImage(new ImageIcon("resources/unknown.png"), width, height));
                     label.setBounds(labelX, labelY, labelSize, labelSize);
                     final int fX = x, fY = y;
                     label.addMouseListener(new MouseListener() {
@@ -97,7 +98,8 @@ public class MenuPlay {
         ArrayList<Field> cloneFields = (ArrayList<Field>) fields.clone(), mines = new ArrayList<Field>();
         for (int i = 0; i < mins; i++) {
             Field field = cloneFields.get(UtilRandom.getRandomNumber(0, cloneFields.size()));
-            //field.label.setText("Mina hihi");
+            field.type = Type.MINE;
+            field.img = "mine";
         }
     }
 
@@ -108,6 +110,8 @@ public class MenuPlay {
         public JLabel label;
 
         public Type type;
+
+        public String img;
 
         public Field(int x, int y) {
             this.x = x;
@@ -120,6 +124,10 @@ public class MenuPlay {
 
     public enum Type {
         MINE, CLASSIC
+    }
+
+    public enum Clicked {
+
     }
 
     public class Frame extends JFrame {
