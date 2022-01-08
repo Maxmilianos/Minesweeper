@@ -78,11 +78,14 @@ public class MenuPlay {
                                     label.setIcon(field.getIcon());
                                     if (field.type == Type.MINE) {
                                         lose();
+                                    } else {
+                                        checkWin();
                                     }
                                 } else if (button == 3 && marks > 0) {
                                     field.at = 2;
                                     label.setIcon(UtilImage.getScaledImage(new ImageIcon(getClass().getClassLoader().getResource("resources/capture.png")), width, height));
                                     usedMark();
+                                    checkWin();
                                 }
                             } else if (at == 2) {
                                 if (button == 3) {
@@ -179,6 +182,17 @@ public class MenuPlay {
             }
         }
         JOptionPane.showMessageDialog(new JFrame(), "Prohrál si, jaká to škoda :)");
+        frame.dispose();
+        new MenuSelect();
+    }
+
+    public void checkWin() {
+        for (Field field : fields) {
+            if (field.type == Type.MINE && field.at != 2) {
+                return;
+            }
+        }
+        JOptionPane.showMessageDialog(new JFrame(), "Výhral si, gratuluju :)");
         frame.dispose();
         new MenuSelect();
     }
