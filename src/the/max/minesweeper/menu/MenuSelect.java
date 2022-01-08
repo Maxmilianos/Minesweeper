@@ -28,6 +28,11 @@ public class MenuSelect {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
+        /*JLabel test = new JLabel("");
+        test.setIcon(new ImageIcon(getClass().getClassLoader().getResource("resources/2.png")));
+        test.setBounds(1, 1, 200, 200);
+        frame.add(test);*/
+
         JLabel mins = new JLabel("Počet min");
         mins.setFont(new Font("Dialog", Font.BOLD, 18));
         mins.setBounds(140, 308, 100, 20);

@@ -52,14 +52,12 @@ public class MenuPlay {
                     field.label = label;
                     label.setText(x + " " + y);
                     label.setText("");
-                    // nějak vypočítat ty píčoviny, aby to vycházelo od okraje po okraj (nějaká rovnice)
                     int width = size / fie,
                             height = size / fie,
                             labelX = size / fie * x,
                             labelY = size / fie * y,
                             labelSize = size / fie;
-                    //System.out.println("x: " + x + ", y: " + y + ", width: " + width + ", height: " + height + ", labelX: " + labelX + ", labelY: " + labelY + ", labelSize: " + labelSize);
-                    label.setIcon(UtilImage.getScaledImage(new ImageIcon("resources/unknown.png"), width, height));
+                    label.setIcon(UtilImage.getScaledImage(new ImageIcon(getClass().getClassLoader().getResource("resources/unknown.png")), width, height));
                     label.setBounds(labelX, labelY, labelSize, labelSize);
                     final int fX = x, fY = y;
                     label.addMouseListener(new MouseListener() {
@@ -83,13 +81,13 @@ public class MenuPlay {
                                     }
                                 } else if (button == 3 && marks > 0) {
                                     field.at = 2;
-                                    label.setIcon(UtilImage.getScaledImage(new ImageIcon("resources/capture.png"), width, height));
+                                    label.setIcon(UtilImage.getScaledImage(new ImageIcon(getClass().getClassLoader().getResource("resources/capture.png")), width, height));
                                     usedMark();
                                 }
                             } else if (at == 2) {
                                 if (button == 3) {
                                     field.at = 0;
-                                    label.setIcon(UtilImage.getScaledImage(new ImageIcon("resources/unknown.png"), width, height));
+                                    label.setIcon(UtilImage.getScaledImage(new ImageIcon(getClass().getClassLoader().getResource("resources/unknown.png")), width, height));
                                     removedMark();
                                 }
                             }
@@ -175,7 +173,7 @@ public class MenuPlay {
         for (Field field : fields) {
             if (field.at == 2) {
                 if (field.type == Type.MINE)
-                    field.label.setIcon(UtilImage.getScaledImage(new ImageIcon("resources/capturedmine.png"), field.label.getIcon().getIconWidth(), field.label.getIcon().getIconHeight()));
+                    field.label.setIcon(UtilImage.getScaledImage(new ImageIcon(getClass().getClassLoader().getResource("resources/capturedmine.png")), field.label.getIcon().getIconWidth(), field.label.getIcon().getIconHeight()));
             } else {
                 field.label.setIcon(field.getIcon());
             }
@@ -208,7 +206,7 @@ public class MenuPlay {
         }
 
         public Icon getIcon() {
-            return UtilImage.getScaledImage(new ImageIcon("resources/" + img + ".png"), label.getIcon().getIconWidth(), label.getIcon().getIconHeight());
+            return UtilImage.getScaledImage(new ImageIcon(getClass().getClassLoader().getResource("resources/" + img + ".png")), label.getIcon().getIconWidth(), label.getIcon().getIconHeight());
         }
     }
 
