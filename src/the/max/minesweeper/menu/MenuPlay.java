@@ -34,7 +34,7 @@ public class MenuPlay {
         for (int x = 0; x < fields; x++) {
             for (int y = 0; y < fields; y++) {
                 JLabel label = new JLabel();
-                label.setText("Ok");
+                label.setText(x + "" + y);
                 // nějak vypočítat ty píčoviny, aby to vycházelo od okraje po okraj (nějaká rovnice)
                 int width = size/fields * x,
                 height = size/fields * y,
