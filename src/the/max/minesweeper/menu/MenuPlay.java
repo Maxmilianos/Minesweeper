@@ -6,18 +6,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
 import java.io.File;
+import java.util.ArrayList;
 
 public class MenuPlay {
 
     private Frame frame;
 
-    private int mins = 0, size = 600, fields = 0;
+    private int mins = 0, size = 600, fie = 0;
 
-    private int[][] minsL = new int[][] {};
+    private ArrayList<Field> fields = new ArrayList<Field>();
 
     public MenuPlay(int m, int f, Rectangle bounds) {
         mins = m;
-        fields = f;
+        fie = f;
         initialize(bounds);
         frame.setVisible(true);
     }
@@ -31,19 +32,21 @@ public class MenuPlay {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
-        for (int x = 0; x < fields; x++) {
-            for (int y = 0; y < fields; y++) {
+        for (int x = 0; x < fie; x++) {
+            for (int y = 0; y < fie; y++) {
+                fields.add(new Field(x, y));
                 JLabel label = new JLabel();
                 label.setText(x + "" + y);
                 // nějak vypočítat ty píčoviny, aby to vycházelo od okraje po okraj (nějaká rovnice)
-                int width = size/fields * x,
-                height = size/fields * y,
-                labelSize = size/fields;
+                int width = size/fie * x,
+                height = size/fie * y,
+                labelSize = size/fie;
                 label.setIcon(new ImageIcon("hihi.jpg"));
                 label.setBounds(width, height, labelSize, labelSize);
                 label.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
+                        System.out.println("Hihi j");
 
                     }
 
@@ -70,6 +73,17 @@ public class MenuPlay {
                 frame.getContentPane().add(label);
             }
         }
+    }
+
+    public class Field {
+
+        public int x, y;
+
+        public Field(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
     }
 
     public class Frame extends JFrame {
