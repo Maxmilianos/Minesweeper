@@ -31,67 +31,73 @@ public class MenuPlay {
         frame = new Frame();
         frame.setTitle("Minesweeper - game");
         frame.setBounds(bounds);
-        frame.setSize(new Dimension(size, size));
-        frame.setResizable(false);
+        // (size + 6) bcs to tak vychazalo, (size + 30) bcs toolbar si zere jeste neco mrdka jedka
+        frame.setSize(new Dimension(size + 6, size + 30 + 50));
+        //frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
+        //frame.getContentPane().add(new Panel());
         for (int x = 0; x < fie; x++) {
             for (int y = 0; y < fie; y++) {
-                Field field = new Field(x, y);
-                fields.add(field);
-                JLabel label = new JLabel();
-                field.label = label;
-                label.setText(x + " " + y);
-                // nějak vypočítat ty píčoviny, aby to vycházelo od okraje po okraj (nějaká rovnice)
-                int width = size/fie,
-                        height = size/fie,
-                        labelX = size/fie * x,
-                        labelY = size/fie * y,
-                        labelSize = size/fie;
-                System.out.println("width: " + width + ", height: " + height + ", labelX: " + labelX + ", labelY: " + labelY + ", labelSize: " + labelSize);
-                label.setIcon(UtilImage.getScaledImage(new ImageIcon("mine.png"), width, height));
-                label.setBounds(labelX, labelY, labelSize, labelSize);
-                label.addMouseListener(new MouseListener() {
-                    /*
-                    1 - leve
-                    2 - prostredni
-                    3 - prave
-                     */
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        System.out.println("Hihi j " + e.getButton() + " " + label.getText());
+                if (true) {
+                    Field field = new Field(x, y);
+                    fields.add(field);
+                    JLabel label = new JLabel();
+                    field.label = label;
+                    label.setText(x + " " + y);
+                    label.setText("");
+                    // nějak vypočítat ty píčoviny, aby to vycházelo od okraje po okraj (nějaká rovnice)
+                    int width = size / fie,
+                            height = size / fie,
+                            labelX = size / fie * x,
+                            labelY = size / fie * y,
+                            labelSize = size / fie;
+                    System.out.println("x: " + x + ", y: " + y + ", width: " + width + ", height: " + height + ", labelX: " + labelX + ", labelY: " + labelY + ", labelSize: " + labelSize);
+                    label.setIcon(UtilImage.getScaledImage(new ImageIcon("mine.png"), width, height));
+                    label.setBounds(labelX, labelY, labelSize, labelSize);
+                    final int fX = x, fY = y;
+                    label.addMouseListener(new MouseListener() {
+                        /*
+                        1 - leve
+                        2 - prostredni
+                        3 - prave
+                         */
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            System.out.println("Hihi j " + "x: " + fX + ", y: " + fY + ", " + e.getButton() + " " + label.getText() + " - " + e.getLocationOnScreen().toString());
 
-                    }
+                        }
 
-                    @Override
-                    public void mousePressed(MouseEvent e) {
+                        @Override
+                        public void mousePressed(MouseEvent e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void mouseExited(MouseEvent e) {
+                        @Override
+                        public void mouseExited(MouseEvent e) {
 
-                    }
-                });
-                frame.getContentPane().add(label);
+                        }
+                    });
+                    frame.getContentPane().add(label);
+                }
             }
         }
 
         ArrayList<Field> cloneFields = (ArrayList<Field>) fields.clone(), mines = new ArrayList<Field>();
         for (int i = 0; i < mins; i++) {
             Field field = cloneFields.get(UtilRandom.getRandomNumber(0, cloneFields.size()));
-            field.label.setText("Mina hihi");
+            //field.label.setText("Mina hihi");
         }
     }
 
@@ -101,11 +107,19 @@ public class MenuPlay {
 
         public JLabel label;
 
+        public Type type;
+
         public Field(int x, int y) {
             this.x = x;
             this.y = y;
         }
 
+
+
+    }
+
+    public enum Type {
+        MINE, CLASSIC
     }
 
     public class Frame extends JFrame {
@@ -117,7 +131,23 @@ public class MenuPlay {
         }*/
     }
 
-    public class Panel {
+    public class Panel extends JPanel {
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            for (int x = 0; x < fie; x++) {
+                for (int y = 0; y < fie; y++) {
+                    int rectX = x * (size/fie),
+                        rectY = y * (size/fie),
+                        width = size/fie,
+                        height = size/fie;
+                    g.drawRect(rectX, rectY, width, height);
+                    if (x == fie-1)
+                        System.out.println((rectX + width) + "");
+                }
+            }
+        }
 
     }
 

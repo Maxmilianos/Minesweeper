@@ -1,5 +1,6 @@
 package the.max.minesweeper;
 
+import the.max.minesweeper.menu.MenuPlay;
 import the.max.minesweeper.menu.MenuSelect;
 
 import java.awt.*;
