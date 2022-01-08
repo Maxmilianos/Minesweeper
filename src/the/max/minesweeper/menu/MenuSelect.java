@@ -33,7 +33,7 @@ public class MenuSelect {
         mins.setBounds(140, 308, 100, 20);
         frame.getContentPane().add(mins);
 
-        JTextField minsText = new JTextField("2");
+        JTextField minsText = new JTextField("10");
         mins.setLabelFor(minsText);
         minsText.setBounds(280, 308, 100, 20);
         minsText.addKeyListener(new KeyAdapter() {

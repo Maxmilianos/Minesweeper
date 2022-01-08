@@ -16,6 +16,7 @@ public class Test {
             create("" + i, Color.RED);
         createMine();
         createCapture();
+        createCapturedMine();
         createUnknown();
     }
 
@@ -91,6 +92,31 @@ public class Test {
         graphics2D.dispose();
         try {
             ImageIO.write(bufferedImage, "png", new File("resources", "capture.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void createCapturedMine() {
+        BufferedImage bufferedImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics2D = bufferedImage.createGraphics();
+        graphics2D.setColor(Color.LIGHT_GRAY);
+        graphics2D.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+        graphics2D.setFont(graphics2D.getFont().deriveFont(90F));
+        graphics2D.setColor(Color.BLACK);
+        int size = 70;
+        graphics2D.fillOval(bufferedImage.getWidth() / 2 - size / 2, bufferedImage.getHeight() / 2 - size / 2, size, size);
+        graphics2D.setColor(Color.GRAY);
+        graphics2D.fillRect(55, 20, 10, 60);
+        graphics2D.setColor(Color.RED);
+        graphics2D.fillRect(20, 20, 50, 30);
+        graphics2D.setColor(Color.BLACK);
+        graphics2D.fillRect(30, 80, 50, 10);
+        graphics2D.setColor(Color.BLACK);
+        graphics2D.drawRect(0, 0, bufferedImage.getWidth() - 1, bufferedImage.getHeight() - 1);
+        graphics2D.dispose();
+        try {
+            ImageIO.write(bufferedImage, "png", new File("resources", "capturedMine.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

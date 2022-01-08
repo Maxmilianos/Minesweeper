@@ -16,9 +16,13 @@ public class MenuPlay {
 
     private Frame frame;
 
-    private int mins = 0, size = 600, fie = 0;
+    private int mins = 0, size = 600, fie = 0, marks = 10;
 
     private ArrayList<Field> fields = new ArrayList<Field>();
+
+    private boolean playing = true;
+
+    private JLabel marksLabel;
 
     public MenuPlay(int m, int f, Rectangle bounds) {
         mins = m;
@@ -31,8 +35,8 @@ public class MenuPlay {
         frame = new Frame();
         frame.setTitle("Minesweeper - game");
         frame.setBounds(bounds);
-        // (size + 6) bcs to tak vychazalo, (size + 30) bcs toolbar si zere jeste neco mrdka jedka
-        frame.setSize(new Dimension(size + 6, size + 29));
+        // (size + 6) bcs to tak vychazalo, (size + 29) bcs toolbar si zere jeste neco jedna + 150 = marks atd
+        frame.setSize(new Dimension(size + 6, size + 29 + 50));
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
@@ -54,7 +58,7 @@ public class MenuPlay {
                             labelX = size / fie * x,
                             labelY = size / fie * y,
                             labelSize = size / fie;
-                    System.out.println("x: " + x + ", y: " + y + ", width: " + width + ", height: " + height + ", labelX: " + labelX + ", labelY: " + labelY + ", labelSize: " + labelSize);
+                    //System.out.println("x: " + x + ", y: " + y + ", width: " + width + ", height: " + height + ", labelX: " + labelX + ", labelY: " + labelY + ", labelSize: " + labelSize);
                     label.setIcon(UtilImage.getScaledImage(new ImageIcon("resources/unknown.png"), width, height));
                     label.setBounds(labelX, labelY, labelSize, labelSize);
                     final int fX = x, fY = y;
@@ -66,8 +70,29 @@ public class MenuPlay {
                          */
                         @Override
                         public void mouseClicked(MouseEvent e) {
+                            if (!playing) return;
                             System.out.println("Hihi j " + "x: " + fX + ", y: " + fY + ", " + e.getButton() + " " + label.getText() + " - " + e.getLocationOnScreen().toString());
-
+                            System.out.println(field.type.toString() + " - " + field.img);
+                            int at = field.at, button = e.getButton();
+                            if (at == 0) {
+                                if (button == 1) {
+                                    field.at = 1;
+                                    label.setIcon(field.getIcon());
+                                    if (field.type == Type.MINE) {
+                                        lose();
+                                    }
+                                } else if (button == 3 && marks > 0) {
+                                    field.at = 2;
+                                    label.setIcon(UtilImage.getScaledImage(new ImageIcon("resources/capture.png"), width, height));
+                                    usedMark();
+                                }
+                            } else if (at == 2) {
+                                if (button == 3) {
+                                    field.at = 0;
+                                    label.setIcon(UtilImage.getScaledImage(new ImageIcon("resources/unknown.png"), width, height));
+                                    removedMark();
+                                }
+                            }
                         }
 
                         @Override
@@ -95,12 +120,69 @@ public class MenuPlay {
             }
         }
 
-        ArrayList<Field> cloneFields = (ArrayList<Field>) fields.clone(), mines = new ArrayList<Field>();
+        ArrayList<Field> cloneFields = (ArrayList<Field>) fields.clone();
         for (int i = 0; i < mins; i++) {
             Field field = cloneFields.get(UtilRandom.getRandomNumber(0, cloneFields.size()));
             field.type = Type.MINE;
             field.img = "mine";
+            cloneFields.remove(field);
         }
+
+        for (Field field : cloneFields) {
+            int x = field.x, y = field.y;
+            Field[] flds = new Field[] {
+                    getField(x - 1, y - 1),  getField(x, y - 1), getField(x + 1, y - 1),
+                    getField(x - 1, y), null, getField(x + 1, y),
+                    getField(x - 1, y + 1), getField(x, y + 1), getField(x + 1, y + 1),
+                };
+            int mines = 0;
+            for (Field f : flds) {
+                if (f != null) {
+                    if (f.type == Type.MINE) {
+                        mines += 1;
+                    }
+                }
+            }
+            field.img = "" + mines;
+        }
+
+        marksLabel = new JLabel(marks + " nevyužitých vlajek", SwingConstants.CENTER);
+        marksLabel.setBounds(0, 600, 600, 50);
+        frame.add(marksLabel);
+    }
+
+    private void removedMark() {
+        if (marks >= mins) return;
+        marks += 1;
+        marksLabel.setText(marks + " nevyužitých vlajek");
+    }
+
+    private void usedMark() {
+        if (marks <= 0) return;
+        marks -= 1;
+        marksLabel.setText(marks + " nevyužitých vlajek");
+    }
+
+    public Field getField(int x, int y) {
+        for (Field f : fields)
+            if (f.x == x && f.y == y)
+                return f;
+        return null;
+    }
+
+    public void lose() {
+        playing = false;
+        for (Field field : fields) {
+            if (field.at == 2) {
+                if (field.type == Type.MINE)
+                    field.label.setIcon(UtilImage.getScaledImage(new ImageIcon("resources/capturedmine.png"), field.label.getIcon().getIconWidth(), field.label.getIcon().getIconHeight()));
+            } else {
+                field.label.setIcon(field.getIcon());
+            }
+        }
+        JOptionPane.showMessageDialog(new JFrame(), "Prohrál si, jaká to škoda :)");
+        frame.dispose();
+        new MenuSelect();
     }
 
     public class Field {
@@ -113,13 +195,21 @@ public class MenuPlay {
 
         public String img;
 
+        /*
+        0 = skryte
+        1 = odhaleno
+        2 = vlajka
+         */
+        public int at = 0;
+
         public Field(int x, int y) {
             this.x = x;
             this.y = y;
         }
 
-
-
+        public Icon getIcon() {
+            return UtilImage.getScaledImage(new ImageIcon("resources/" + img + ".png"), label.getIcon().getIconWidth(), label.getIcon().getIconHeight());
+        }
     }
 
     public enum Type {
